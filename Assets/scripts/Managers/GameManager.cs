@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
         instance = this;
         //TODO Tengo que preguntar por que los objetos que no se destruyen entre escenas bajan tanto el rendimiento de las escenas cargadas
-       // DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(transform.gameObject);
     }
 
 
