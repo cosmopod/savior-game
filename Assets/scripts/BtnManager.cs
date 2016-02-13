@@ -1,36 +1,48 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class BtnManager : MonoBehaviour
 {
     Transform panel;
+    RawImage bannerTitle;
+    public Texture winTexture;
+    public Texture loseTexture;
+
 
     // Use this for initialization
     void Start()
     {
-
         panel = transform.FindChild("Panel");
-        if(panel != null)
-        {
-            panel.gameObject.SetActive(false);
-        }
+        bannerTitle = panel.FindChild("BannerTitle").gameObject.GetComponent<RawImage>();
+        panel.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        if((GameManager.Instance.gameState == GameManager.GameState.Win) && (panel != null))
+        switch (GameManager.Instance.gameState)
         {
-            panel.gameObject.SetActive(true);
+            case GameManager.GameState.Play:
+                panel.gameObject.SetActive(false);        
+                break;
+
+            case GameManager.GameState.Win:
+                panel.gameObject.SetActive(true);
+                bannerTitle.texture = winTexture;
+                break;
+
+            case GameManager.GameState.GameOver:
+                panel.gameObject.SetActive(true);
+                bannerTitle.texture = loseTexture;
+                break;
         }
     }
 
-
     public void RetryGame()
     {
-        
-        Application.LoadLevel("savior");
+        GameManager.Instance.gameState = GameManager.GameState.Play;
+        Application.LoadLevel(Application.loadedLevelName);
     }
 
     public void QuitAplication()

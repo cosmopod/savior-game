@@ -21,14 +21,19 @@ public class Instructions : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        text = GetComponent<Text>();
-        audioLetter = GetComponent<AudioSource>();
 
-        textComp = GetComponent<Text>();
-        message = textComp.text;
-        textComp.text = "";
-        StartCoroutine(TypeText());
-        
+        if (GameManager.Instance.ReadBriefing)
+            gameObject.SetActive(false);
+        else {
+            text = GetComponent<Text>();
+            audioLetter = GetComponent<AudioSource>();
+
+            textComp = GetComponent<Text>();
+            message = textComp.text;
+            textComp.text = "";
+            StartCoroutine(TypeText());
+        }
+
     }
 
     // Update is called once per frame
@@ -36,7 +41,7 @@ public class Instructions : MonoBehaviour
     {
 
         timeElapsed += Time.deltaTime;
-       if (timeElapsed >= timeReading)
+        if (timeElapsed >= timeReading)
             StartCoroutine(ReduceAlpha());
     }
 

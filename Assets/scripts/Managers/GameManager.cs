@@ -1,45 +1,38 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
 
-    private static GameManager instance = null;
-    public enum GameState {Play, GameOver, Win};
+    public enum GameState { Play, GameOver, Win };
     public GameState gameState;
+    bool readBriefing;
 
 
-    // Singleton de GameManager
-    public static GameManager Instance
+    public bool ReadBriefing
     {
-        get
-        {
-            return instance;
-        }
+        get { return readBriefing; }
+        set { readBriefing = value; }
     }
+
+    protected GameManager() { }
+
     private void Awake()
     {
-        if (instance != null && instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-
-        instance = this;
-        //TODO Tengo que preguntar por que los objetos que no se destruyen entre escenas bajan tanto el rendimiento de las escenas cargadas
-        DontDestroyOnLoad(transform.gameObject);
+      
     }
 
 
     // Use this for initialization
     void Start()
     {
-
+        ReadBriefing = !ReadBriefing;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Helicopter.Instance.IsWorking() && gameState != GameState.Win)
+        if (Helicopter.Instance.IsWorking())
         {
             gameState = GameState.Play;
 
@@ -51,15 +44,10 @@ public class GameManager : MonoBehaviour
 
 
 
-        if(City.Instance.FuelTanks == City.Instance.MaxFuelTanks)
+        if (City.Instance.FuelTanks == City.Instance.MaxFuelTanks)
         {
             gameState = GameState.Win;
         }
 
-
-        if(gameState == GameState.GameOver)
-        {
-            Application.LoadLevel("gameOver");
-        }
     }
 }
